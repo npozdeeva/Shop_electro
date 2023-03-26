@@ -1,7 +1,7 @@
 import csv
 class Product:
     product_all = []
-    pay_rate = 0.85
+    pay_rate = 0.8
 
     def __init__(self, name, price, count):
         self.name = name
@@ -19,9 +19,7 @@ class Product:
 
     @staticmethod
     def is_integer(data) -> bool:
-        if float(data).is_integer():
-            return True
-        return False
+        return float(data).is_integer()
 
 
     @property
@@ -33,48 +31,48 @@ class Product:
         if len(value) <= 10:
             self.__name = value
         else:
-            print('Exception: Длина наименования товара превышает 10')
+            raise Exception('Длина наименования товара превышает 10 символов')
 
 
     @classmethod
     def instantiate_from_csv(cls):
-        with open('items.csv','r', encoding="UTF-8", newline='') as csvfile:
+        with open('../items.csv','r', encoding="UTF-8", newline='') as csvfile:
             reader = csv.DictReader(csvfile, delimiter=',')
             for row in reader:
-                  cls(row['name'],int(row['price']),int(row['quantity']))
+                  cls(row['name'],float(row['price']),int(row['quantity']))
 
 
 
 
-#task1
-item1 = Product("Смартфон", 10000, 20)
-item2 = Product("Ноутбук", 20000, 5)
-
-print(item1.price)
-item1.apply_discount()
-print(item1.price)
-print(item2.price)
-
-print(Product.product_all)
-
-print(item1.calculate_total_price())
-print(item2.calculate_total_price())
-
-product = Product('Телефон', 10000, 5)
-
-print(product.name)
-
-product.name = 'СуперСмартфон'
-
-
-Product.instantiate_from_csv()  # создание объектов из данных файла
-print(len(Product.product_all))  # в файле 5 записей с данными по товарам
-
-product1 = Product.product_all[0]
-print(product1.name)
-
-
-print(Product.is_integer(5))
-print(Product.is_integer(5.0))
-print(Product.is_integer(5.5))
+# #task1
+# item1 = Product("Смартфон", 10000, 20)
+# item2 = Product("Ноутбук", 20000, 5)
+#
+# print(item1.price)
+# item1.apply_discount()
+# print(item1.price)
+# print(item2.price)
+#
+# print(Product.product_all)
+#
+# print(item1.calculate_total_price())
+# print(item2.calculate_total_price())
+#
+# product = Product('Телефон', 10000, 5)
+#
+# print(product.name)
+#
+# #product.name = 'СуперСмартфон'
+#
+#
+# #Product.instantiate_from_csv()  # создание объектов из данных файла
+# print(len(Product.product_all))  # в файле 5 записей с данными по товарам
+#
+# product1 = Product.product_all[0]
+# print(product1.name)
+#
+#
+# print(Product.is_integer(5))
+# print(Product.is_integer(5.0))
+# print(Product.is_integer(5.5))
 
