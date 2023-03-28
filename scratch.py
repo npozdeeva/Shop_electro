@@ -9,6 +9,13 @@ class Product:
         self.count = count
         self.product_all.append(self)
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.name}', '{self.price}', {self.count})"
+
+
+    def __str__(self):
+        return f'{self.name}'
+
 
     def apply_discount(self):
         self.price = self.price * self.pay_rate
@@ -18,8 +25,11 @@ class Product:
         return self.total_price
 
     @staticmethod
-    def is_integer(data) -> bool:
-        return float(data).is_integer()
+    def is_integer(data):
+        if data % 1 == 0:
+            return int(data)
+        else:
+            return float(data)
 
 
     @property
@@ -35,13 +45,17 @@ class Product:
 
 
     @classmethod
-    def instantiate_from_csv(cls):
-        with open('../items.csv','r', encoding="UTF-8", newline='') as csvfile:
-            reader = csv.DictReader(csvfile, delimiter=',')
+    def instantiate_from_csv(cls, filename: str = 'items.csv') -> list:
+        items: list = []
+        with open(filename, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
             for row in reader:
-                  cls(row['name'],float(row['price']),int(row['quantity']))
-
-
+                price = float(row['price'])
+                count = int(row['count'])
+                row['price'] = int(price) if cls.is_integer(price) else price
+                row['count'] = count
+                items.append(cls(**row))
+        return items
 
 
 # #task1
@@ -65,14 +79,18 @@ class Product:
 # #product.name = 'СуперСмартфон'
 #
 #
-# #Product.instantiate_from_csv()  # создание объектов из данных файла
-# print(len(Product.product_all))  # в файле 5 записей с данными по товарам
+Product.instantiate_from_csv()  # создание объектов из данных файла
+#print(len(Product.product_all))  # в файле 5 записей с данными по товарам
 #
-# product1 = Product.product_all[0]
-# print(product1.name)
+product1 = Product.product_all[5]
+print(product1.price)
 #
 #
 # print(Product.is_integer(5))
 # print(Product.is_integer(5.0))
 # print(Product.is_integer(5.5))
 
+item1 = Product("Смартфон", 10000, 20)
+# >>> item1
+# Item('Смартфон', 10000, 20)
+print(item1)
